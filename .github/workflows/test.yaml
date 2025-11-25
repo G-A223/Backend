@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ master ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ master ]
 
 jobs:
   tests:
@@ -13,16 +13,17 @@ jobs:
 
     env:
       APP_ENV: test
-      APP_SECRET: ${{ secrets.APP_SECRET }}
-      DATABASE_URL: "postgresql://symfony:password@localhost:5432/app_test?serverVersion=15&charset=utf8"
+      APP_SECRET: "test_secret_key_for_github_actions"
+      APP_DEBUG: 0
+      DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/test_db?serverVersion=16&charset=utf8"
 
     services:
       postgres:
-        image: postgres:15-alpine
+        image: postgres:16-alpine
         env:
-          POSTGRES_DB: app_test
-          POSTGRES_USER: symfony
-          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
         ports:
           - 5432:5432
         options: >-
