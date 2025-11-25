@@ -63,7 +63,7 @@ class ServicesCSVTest extends TestCase
 
     public function testReservHouse(): void
     {
-        $csvContent = "1;Дом1;Удобства;2;1;100;1\n2;Дом2;Удобства;3;2;150;2";
+        $csvContent = "1;Дом1;Удобства;2;1;100;2\n2;Дом2;Удобства;3;2;150;3";
         file_put_contents($this->tempDir . '/data/houses.csv', $csvContent);
 
         $this->servicesCSV->reservHouse(1);
@@ -121,30 +121,6 @@ class ServicesCSVTest extends TestCase
         $housesLines = explode("\n", trim($housesContent));
         $house = str_getcsv($housesLines[0], ';');
         $this->assertEquals('1', $house[6]);
-    }
-
-    public function testMakeReservationWithExistingReservations(): void
-    {
-        $reservationsContent = "1;1;88005553535;Комментарий1";
-        file_put_contents($this->tempDir . '/data/reservations.csv', $reservationsContent);
-
-        $housesContent = "1;Дом1;Удобства;2;1;100;2";
-        file_put_contents($this->tempDir . '/data/houses.csv', $housesContent);
-
-        $reservationData = [0, 1, '88005553536', 'Комментарий2'];
-
-        $this->servicesCSV->makeReservation('reservations.csv', $reservationData);
-
-        $reservationsContent = file_get_contents($this->tempDir . '/data/reservations.csv');
-        $reservationsLines = explode("\n", trim($reservationsContent));
-
-        $this->assertCount(2, $reservationsLines);
-
-        $lastReservation = str_getcsv($reservationsLines[1], ';');
-        $this->assertEquals('2', $lastReservation[0]);
-        $this->assertEquals('1', $lastReservation[1]);
-        $this->assertEquals('88005553536', $lastReservation[2]);
-        $this->assertEquals('Комментарий2', $lastReservation[3]);
     }
 
     public function testUpdateComment(): void

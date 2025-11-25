@@ -32,7 +32,7 @@ class HouseControllerTest extends WebTestCase
     public function testGetHouses(): void
     {
         $house = new House();
-        $house->setName('Тестовый пользователь');
+        $house->setName('Тестовый дом');
         $house->setFacilities('Удобства');
         $house->setBeds(2);
         $house->setBathrooms(1);
