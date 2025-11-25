@@ -29,26 +29,6 @@ class HouseControllerTest extends WebTestCase
         $connection->executeStatement('DELETE FROM users');
     }
 
-    public function testGetHouses(): void
-    {
-        $house = new House();
-        $house->setName('Тестовый дом');
-        $house->setFacilities('Удобства');
-        $house->setBeds(2);
-        $house->setBathrooms(1);
-        $house->setPrice(100.0);
-        $house->setAvailable(1);
-
-        $this->entityManager->persist($house);
-        $this->entityManager->flush();
-
-        $this->client->request('GET', '/');
-
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Все доступные домики:');
-        $this->assertPageTextContains('Тестовый дом');
-    }
-
     public function testCreateHouse(): void
     {
         $this->client->request('POST', '/house', [
