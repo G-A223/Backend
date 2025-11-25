@@ -52,4 +52,4 @@ jobs:
         run: php bin/console cache:clear --env=test
 
       - name: Run PHPUnit tests
-        run: php bin/phpunit --testdox --verbose
+        run: php bin/phpunit --testdox
