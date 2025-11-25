@@ -16,6 +16,8 @@ services:
             dockerfile: docker/php/Dockerfile
         volumes:
             - .:/var/www/html
+        environment:
+            - MESSENGER_TRANSPORT_DSN=doctrine://default
         restart: always
     db:
         build:

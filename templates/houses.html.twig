@@ -14,19 +14,37 @@
         <p>Нет доступных домиков</p>
     {% else %}
         <table>
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Название</td>
+                    <td>Удобства</td>
+                    <td>Кол-во спальных мест</td>
+                    <td>Кол-во ванных комнат</td>
+                    <td>Цена</td>
+                    <td>Кол-во свободных домиков</td>
+                </tr>
+            </thead>
             <tbody>
                 {% for house in houses %}
-                {% if house[6] != "0" %}
+                {% if house.available != 0 %}
                     <tr>
-                        {% for elem in house %}
-                            <td>{{ elem }}</td>
-                        {% endfor %}
+                        <td>{{ house.id }}</td>
+                        <td>{{ house.name }}</td>
+                        <td>{{ house.facilities }}</td>
+                        <td>{{ house.beds }}</td>
+                        <td>{{ house.bathrooms }}</td>
+                        <td>{{ house.price }}</td>
+                        <td>{{ house.available }}</td>
                     </tr>
                 {% endif %}
                 {% endfor %}
             </tbody>
         </table>
     {% endif %}
+    <a href="{{ path('create_house') }}">
+        <button style="margin-top: 8px;">Добавить домик</button>
+    </a>
     <br><br>
 
     <h1>Существующие заявки:</h1>
@@ -37,7 +55,8 @@
             <thead>
                 <tr>
                     <td>ID заказа</td>
-                    <td>ID домика</td>
+                    <td>Название домика</td>
+                    <td>Имя пользователя</td>
                     <td>Номер телефона</td>
                     <td>Комментарий</td>
                     <td>Изменить заявку</td>
@@ -46,12 +65,14 @@
             <tbody>
                 {% for reserv in reservations %}
                     <tr>
-                        {% for elem in reserv %}
-                            <td>{{ elem }}</td>
-                        {% endfor %}
+                        <td>{{ reserv.id }}</td>
+                        <td>{{ reserv.house.name }}</td>
+                        <td>{{ reserv.user.name }}</td>
+                        <td>{{ reserv.user.phone }}</td>
+                        <td>{{ reserv.comment }}</td>
 
                         <td style="text-align: center; vertical-align: middle;">
-                            <a href="{{ path('edit', {id: reserv[0]}) }}">
+                            <a href="{{ path('edit', {id: reserv.id}) }}">
                                 <button>Редактировать</button>
                             </a>
                         </td>
@@ -60,6 +81,34 @@
             </tbody>
         </table>
     {% endif %}
+    <br><br>
+
+    <h1>Пользователи:</h1>
+    {% if users is empty %}
+        <p>Нет пользователей</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Имя</td>
+                    <td>Номер телефона</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.phone }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <a href="{{ path('create_user') }}">
+        <button style="margin-top: 8px;">Создать пользователя</button>
+    </a>
     <br><br>
 
     <h1>Создать заявку:</h1>
