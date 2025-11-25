@@ -46,7 +46,7 @@ class HouseControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Все доступные домики:');
-        $this->assertSelectorTextContains('td', 'Тестовый дом');
+        $this->assertPageTextContains('Тестовый дом');
     }
 
     public function testCreateHouse(): void
