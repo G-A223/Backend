@@ -37,12 +37,6 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_pgsql, dom, filter, json
           coverage: none
 
-      - name: Create .env.test file
-        run: |
-          echo "APP_ENV=test" > .env.test
-          echo "APP_SECRET=test_secret_123" >> .env.test
-          echo "DATABASE_URL=\"postgresql://test_user:test_password@localhost:5432/test_db?serverVersion=16&charset=utf8\"" >> .env.test
-
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
@@ -50,9 +44,6 @@ jobs:
         run: |
           php bin/console doctrine:database:create --env=test
           php bin/console doctrine:migrations:migrate --env=test -n
-
-      - name: Clear cache
-        run: php bin/console cache:clear --env=test
 
       - name: Run PHPUnit tests
         run: php bin/phpunit --testdox --verbose
