@@ -1,21 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Редактировать заявку №{{ reservation[0] }}</h1>
+    <h1>Редактировать заявку №{{ reservation.id }}</h1>
     <form method="POST">
         <input type='hidden' name='_method' value='PUT'>
 
         <div>
-            <label>ID домика: {{ reservation[1] }}</label>
+            <label>ID домика: {{ reservation.house.id }}</label>
         </div>
 
         <div>
-            <label>Телефон: {{ reservation[2] }}</label>
+            <label>Телефон: {{ reservation.user.phone }}</label>
         </div>
 
         <div>
             <label for="comment">Комментарий:</label><br>
-            <textarea name="comment" rows="4" cols="50" required>{{ reservation[3] }}</textarea>
+            <textarea name="comment" rows="4" cols="50" required>{{ reservation.comment }}</textarea>
         </div>
 
         <button type=submit>Сохранить</button>
