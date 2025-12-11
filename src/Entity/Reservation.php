@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-
 
 #[ORM\Entity]
 #[ORM\Table(name: 'reservations')]
-class Reservation {
+class Reservation
+{
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column (type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: House::class, inversedBy: 'reservations')]
@@ -20,7 +21,7 @@ class Reservation {
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservations')]
     private User $user;
 
-    #[ORM\Column (type: "text")]
+    #[ORM\Column(type: 'text')]
     private $comment;
 
 
@@ -65,4 +66,3 @@ class Reservation {
         return $this;
     }
 }
-

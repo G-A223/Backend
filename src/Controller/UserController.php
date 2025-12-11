@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
@@ -30,7 +33,7 @@ class UserController extends AbstractController
                     $entityManager->flush();
 
                     $this->addFlash('success', 'Пользователь создан');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
                 }
             } else {

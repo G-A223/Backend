@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 class ServicesCSV
@@ -17,7 +19,7 @@ class ServicesCSV
         $file = fopen($filePath, 'r');
 
         $data = [];
-        while (($row = fgetcsv($file, 1000, ";")) !== false) {
+        while (($row = fgetcsv($file, 1000, ';')) !== false) {
             $data[] = $row;
         }
 
@@ -29,7 +31,7 @@ class ServicesCSV
         $filename = 'houses.csv';
         $data = $this->readCSV($filename);
 
-        foreach($data as &$elem) {
+        foreach ($data as &$elem) {
             if ($elem[0] == $id) {
                 $elem[6] = (int)$elem[6] - 1;
                 break;
@@ -38,7 +40,7 @@ class ServicesCSV
 
         $filePath = $this->projectDir. '/data/' .$filename;
         $file = fopen($filePath, 'w');
-        foreach($data as $row) {
+        foreach ($data as $row) {
             fputcsv($file, $row, ';');
         }
         fclose($file);
@@ -71,7 +73,7 @@ class ServicesCSV
     {
         $data = $this->readCSV($filename);
 
-        foreach($data as &$elem) {
+        foreach ($data as &$elem) {
             if ($elem[0] == $id) {
                 $elem[3] = $comment;
                 break;
@@ -80,7 +82,7 @@ class ServicesCSV
 
         $filePath = $this->projectDir. '/data/' .$filename;
         $file = fopen($filePath, 'w');
-        foreach($data as $row) {
+        foreach ($data as $row) {
             fputcsv($file, $row, ';');
         }
         fclose($file);
