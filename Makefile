@@ -5,7 +5,6 @@ help:
 	@echo "  make check      - Check code"
 	@echo "  make fix        - Fix code"
 	@echo "  make test       - Run tests"
-	@echo "  make clean      - Ckear cache"
 
 install:
 	composer install
@@ -13,24 +12,18 @@ install:
 
 check:
 	@echo "=== PHP CodeSniffer ==="
-	vendor/bin/phpcs --standard=phpcs.xml || true
+	vendor/bin/phpcs --standard=phpcs.xml
 	@echo ""
 	@echo "=== PHP-CS-Fixer ==="
-	vendor/bin/php-cs-fixer fix --dry-run --diff || true
+	vendor/bin/php-cs-fixer fix --dry-run --diff
 	@echo ""
 	@echo "=== Psalm ==="
 	vendor/bin/psalm
 
 fix:
 	vendor/bin/php-cs-fixer fix
-	vendor/bin/phpcbf --standard=phpcs.xml || true
+	vendor/bin/phpcbf --standard=phpcs.xml
 	vendor/bin/psalm --alter --issues=all
 
 test:
 	vendor/bin/phpunit
-
-clean:
-	rm -rf var/cache/*
-	rm -rf var/log/*
-	rm -rf .phpcs-cache
-	rm -rf var/cache/.psalm-cache
