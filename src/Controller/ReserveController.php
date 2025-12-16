@@ -16,34 +16,60 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ReserveController extends AbstractController
 {
-    #[Route('/reserve', name: 'reserve', methods: ['POST'])]
-    public function reserve(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/api/reservations', name: 'reservations')]
+    public function getReservations(EntityManagerInterface $entityManager): Response
     {
-        $message = '';
-        $phone = $request->request->get('phone_number');
-        $id = $request->request->get('id');
-        $comment = $request->request->get('comment');
+        $reservations = $entityManager->getRepository(Reservation::class)->findAll();
+
+        $data = [];
+        foreach ($reservations as $reservation) {
+            $data[] = [
+                'id' => $reservation->getId(),
+                'house id' => $reservation->getHouse()->getId(),
+                'username' => $reservation->getUser()->getName(),
+                'phone number' => $reservation->getUser()->getPhone(),
+                'comment' => $reservation->getComment(),
+            ];
+        }
+
+        return $this->json([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
+    #[Route('/api/reserve', name: 'reserve', methods: ['POST'])]
+    public function reserve(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $phone = $data['phone_number'];
+        $id = $data['id'];
+        $comment = $data['comment'];
 
         $house = $entityManager->getRepository(House::class)->find($id);
 
         if (!$house) {
-            $this->addFlash('error', 'Домик не найден');
-            return $this->redirectToRoute('home');
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка: домика с таким id не существует'
+            ], Response::HTTP_NOT_FOUND);
         }
 
         if ($house->getAvailable() <= 0) {
-            $this->addFlash('error', 'Нет свободных домиков для бронирования');
-            return $this->redirectToRoute('home');
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка: нет свободных домиков для бронирования'
+            ], Response::HTTP_CONFLICT);
         }
 
         $user = $entityManager->getRepository(User::class)->findOneBy(['phone' => $phone]);
 
         if (!$user) {
-            $user = new User();
-            $user->setPhone($phone);
-            $user->setName('Пользователь');
-
-            $entityManager->persist($user);
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка: такого пользователя не сущетсвует'
+            ], Response::HTTP_NOT_FOUND);
         }
 
         $reservation = new Reservation();
@@ -57,35 +83,49 @@ class ReserveController extends AbstractController
             $entityManager->persist($reservation);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Заявка успешно создана!');
+            return $this->json([
+                'success' => true,
+                'message' => 'Заявка успешно создана!',
+                'reservation' => [
+                    'id' => $reservation->getId(),
+                    'house id' => $reservation->getHouse()->getId(),
+                    'username' => $reservation->getUser()->getName(),
+                    'phone number' => $reservation->getUser()->getPhone(),
+                    'comment' => $reservation->getComment(),
+                ]
+            ], Response::HTTP_CREATED);
         } catch (Exception $e) {
-            $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка: ' . $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->redirectToRoute('home');
     }
 
-    #[Route('/reserve/{id}/edit', name: 'edit', methods: ['GET', 'POST', 'PUT'])]
-    public function edit(Request $request, int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/api/reserve/{id}', name: 'edit', methods: ['PUT'])]
+    public function edit(Request $request, int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $reservation = $entityManager->getRepository(Reservation::class)->find($id);
+        $data = json_decode($request->getContent(), true);
+        $comment = $data['comment'];
+        $reservation->setComment($comment);
 
-        if ($request->isMethod('POST') && $request->request->get('_method') === 'PUT') {
-            $comment = $request->request->get('comment');
-            $reservation->setComment($comment);
-
-            try {
-                $entityManager->flush();
-                $this->addFlash('success', 'Комментарий изменен');
-            } catch (Exception $e) {
-                $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
-            }
-
-            return $this->redirectToRoute('home');
+        try {
+            $entityManager->flush();
+            return $this->json([
+                'success' => true,
+                'message' => 'Комментарий изменен',
+                'reservation' => [
+                    'id' => $reservation->getId(),
+                    'comment' => $reservation->getComment(),
+                ]
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка: ' . $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->render('edit.html.twig', [
-            'reservation' => $reservation,
-        ]);
     }
 }

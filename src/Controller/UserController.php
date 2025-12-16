@@ -11,38 +11,87 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    #[Route('/create_user', name: 'create_user', methods: ['POST', 'GET'])]
-    public function createUser(EntityManagerInterface $entityManager, Request $request): Response
+    #[Route('/api/users', name: 'users')]
+    public function getUsers(EntityManagerInterface $entityManager): Response
     {
-        if ($request->isMethod('POST')) {
-            $name = $request->request->get('name');
-            $phone = $request->request->get('phone_number');
+        $users = $entityManager->getRepository(User::class)->findAll();
 
-            $existingUser  = $entityManager->getRepository(User::class)->findOneBy(['phone' => $phone]);
-
-            if (!$existingUser) {
-                $user = new User();
-                $user->setPhone($phone);
-                $user->setName($name);
-
-                try {
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Пользователь создан');
-                } catch (Exception $e) {
-                    $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
-                }
-            } else {
-                $this->addFlash('error', 'Пользователь с данным номером телефона уже существует');
-            }
-
-            return $this->redirectToRoute('home');
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = [
+                'id' => $user->getId(),
+                'username' => $user->getName(),
+                'phone number' => $user->getPhone(),
+                'roles' => $user->getRoles(),
+            ];
         }
 
-        return $this->render('create_user.html.twig');
+        return $this->json([
+            'success' => true,
+            'data' => $data,
+        ]);
+    }
+
+    #[Route('/api/create_user', name: 'create_user', methods: ['POST'])]
+    public function createUser(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $name = $data['name'];
+        $phone = $data['phone_number'];
+        $password = $data['password'];
+
+        if (strlen($password) < 8) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Пароль должен содержать минимум 8 символов'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $existingUser  = $entityManager->getRepository(User::class)->findOneBy(['phone' => $phone]);
+
+        if (!$existingUser) {
+            $user = new User();
+
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $password
+            );
+
+            $user->setPhone($phone);
+            $user->setName($name);
+            $user->setPassword($hashedPassword);
+            $user->setRoles('ROLE_USER');
+
+            try {
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->json([
+                    'success' => true,
+                    'message' => 'Пользователь создан',
+                    'user' => [
+                        'id' => $user->getId(),
+                        'username' => $user->getName(),
+                        'phone number' => $user->getPhone(),
+                        'roles' => $user->getRoles(),
+                    ]
+                ], Response::HTTP_CREATED);
+            } catch (Exception $e) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Ошибка: ' . $e->getMessage()
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return $this->json([
+                'success' => false,
+                'message' => 'Ошибка: пользователь с данным номером телефона уже существует'
+            ], Response::HTTP_CONFLICT);
+        }
     }
 }
