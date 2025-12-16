@@ -71,7 +71,7 @@ class HouseControllerTest extends WebTestCase
     public function testGetHouses(): void
     {
         $house1 = new House();
-        $house1->setName('Дом 1');
+        $house1->setName('House 1');
         $house1->setFacilities('WiFi, TV');
         $house1->setBeds(2);
         $house1->setBathrooms(1);
@@ -79,8 +79,8 @@ class HouseControllerTest extends WebTestCase
         $house1->setAvailable(3);
 
         $house2 = new House();
-        $house2->setName('Дом 2');
-        $house2->setFacilities('Бассейн, Сауна');
+        $house2->setName('House 2');
+        $house2->setFacilities('Pool');
         $house2->setBeds(4);
         $house2->setBathrooms(2);
         $house2->setPrice(200.0);
@@ -105,8 +105,8 @@ class HouseControllerTest extends WebTestCase
     public function testCreateHouse(): void
     {
         $houseData = [
-            'name' => 'Тестовый дом',
-            'facilities' => 'WiFi, Кондиционер, TV',
+            'name' => 'Test house',
+            'facilities' => 'WiFi, TV',
             'beds' => 3,
             'bathrooms' => 2,
             'price' => 150.0,
@@ -130,7 +130,7 @@ class HouseControllerTest extends WebTestCase
         $this->assertTrue($response['success']);
         $this->assertEquals('Домик успешно добавлен!', $response['message']);
 
-        $house = $this->entityManager->getRepository(House::class)->findOneBy(['name' => 'Тестовый дом']);
+        $house = $this->entityManager->getRepository(House::class)->findOneBy(['name' => 'Test house']);
         $this->assertNotNull($house);
         $this->assertEquals(3, $house->getBeds());
     }
@@ -138,7 +138,7 @@ class HouseControllerTest extends WebTestCase
     public function testGetReservations(): void
     {
         $house = new House();
-        $house->setName('Тестовый дом');
+        $house->setName('Test house');
         $house->setFacilities('WiFi');
         $house->setBeds(2);
         $house->setBathrooms(1);
@@ -150,7 +150,7 @@ class HouseControllerTest extends WebTestCase
         $reservation = new Reservation();
         $reservation->setHouse($house);
         $reservation->setUser($user);
-        $reservation->setComment('Тестовый комментарий');
+        $reservation->setComment('Test Comment');
 
         $this->entityManager->persist($house);
         $this->entityManager->persist($reservation);
@@ -166,14 +166,14 @@ class HouseControllerTest extends WebTestCase
         $this->assertTrue($response['success']);
         $this->assertArrayHasKey('data', $response);
         $this->assertCount(1, $response['data']);
-        $this->assertEquals('Тестовый комментарий', $response['data'][0]['comment']);
+        $this->assertEquals('Test Comment', $response['data'][0]['comment']);
     }
 
     public function testCreateReservationSuccess(): void
     {
         $house = new House();
-        $house->setName('Тестовый дом');
-        $house->setFacilities('Удобства');
+        $house->setName('Test house');
+        $house->setFacilities('Fascilities');
         $house->setBeds(2);
         $house->setBathrooms(1);
         $house->setPrice(100.0);
@@ -193,7 +193,7 @@ class HouseControllerTest extends WebTestCase
             json_encode([
                 'phone_number' => '88005553535',
                 'id' => $house->getId(),
-                'comment' => 'Тестовый комментарий'
+                'comment' => 'Test comment'
             ])
         );
 
@@ -213,6 +213,6 @@ class HouseControllerTest extends WebTestCase
             'user' => $user
         ]);
         $this->assertNotNull($reservation);
-        $this->assertEquals('Тестовый комментарий', $reservation->getComment());
+        $this->assertEquals('Test comment', $reservation->getComment());
     }
 }
