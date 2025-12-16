@@ -100,7 +100,6 @@ class ReserveController extends AbstractController
                 'message' => 'Ошибка: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
     }
 
     #[Route('/api/reserve/{id}', name: 'edit', methods: ['PUT'])]

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Entity\User;
@@ -34,7 +36,7 @@ class LoginControllerTest extends WebTestCase
     {
         $user = new User();
         $user->setPhone($phone);
-        $user->setName('Тестовый пользователь');
+        $user->setName('РўРµСЃС‚РѕРІС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ');
         $user->setRoles(['ROLE_USER']);
 
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
@@ -68,7 +70,7 @@ class LoginControllerTest extends WebTestCase
         $response = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertTrue($response['success']);
-        $this->assertEquals('Вы успешно вошли в свою учетную запись', $response['message']);
+        $this->assertEquals('Р’С‹ СѓСЃРїРµС€РЅРѕ РІРѕС€Р»Рё РІ СЃРІРѕСЋ СѓС‡РµС‚РЅСѓСЋ Р·Р°РїРёСЃСЊ', $response['message']);
         $this->assertArrayHasKey('user', $response);
         $this->assertEquals($user->getId(), $response['user']['id']);
         $this->assertEquals($user->getName(), $response['user']['username']);
@@ -96,7 +98,7 @@ class LoginControllerTest extends WebTestCase
 
         $response = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertFalse($response['success']);
-        $this->assertEquals('Введены неверные данные', $response['message']);
+        $this->assertEquals('Р’РІРµРґРµРЅС‹ РЅРµРІРµСЂРЅС‹Рµ РґР°РЅРЅС‹Рµ', $response['message']);
     }
 
     public function testLoginWithWrongPassword(): void
@@ -119,7 +121,7 @@ class LoginControllerTest extends WebTestCase
 
         $response = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertFalse($response['success']);
-        $this->assertEquals('Введены неверные данные', $response['message']);
+        $this->assertEquals('Р’РІРµРґРµРЅС‹ РЅРµРІРµСЂРЅС‹Рµ РґР°РЅРЅС‹Рµ', $response['message']);
     }
 
     public function testLoginWithoutCredentials(): void
@@ -137,7 +139,7 @@ class LoginControllerTest extends WebTestCase
 
         $response = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertFalse($response['success']);
-        $this->assertEquals('Введены неверные данные', $response['message']);
+        $this->assertEquals('Р’РІРµРґРµРЅС‹ РЅРµРІРµСЂРЅС‹Рµ РґР°РЅРЅС‹Рµ', $response['message']);
     }
 
     public function testLogout(): void
@@ -166,7 +168,7 @@ class LoginControllerTest extends WebTestCase
         $response = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertTrue($response['success']);
-        $this->assertEquals('Вы вышли из своей учетной записи', $response['message']);
+        $this->assertEquals('Р’С‹ РІС‹С€Р»Рё РёР· СЃРІРѕРµР№ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё', $response['message']);
     }
 
     public function testCreateUserAndLogin(): void
@@ -178,7 +180,7 @@ class LoginControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'name' => 'Новый пользователь',
+                'name' => 'РќРѕРІС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ',
                 'phone_number' => '89001234567',
                 'password' => 'strongpassword123'
             ])
@@ -202,6 +204,6 @@ class LoginControllerTest extends WebTestCase
 
         $response = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertTrue($response['success']);
-        $this->assertEquals('Новый пользователь', $response['user']['username']);
+        $this->assertEquals('РќРѕРІС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ', $response['user']['username']);
     }
 }

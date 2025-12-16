@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\House;
-use App\Entity\Reservation;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,7 +66,6 @@ class HouseController extends AbstractController
                     'facilities' => $house->getFacilities(),
                 ]
             ], Response::HTTP_CREATED);
-
         } catch (Exception $e) {
             return $this->json([
                 'success' => false,

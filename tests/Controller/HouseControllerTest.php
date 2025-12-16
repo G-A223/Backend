@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Entity\House;
+use App\Entity\Reservation;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -65,7 +68,7 @@ class HouseControllerTest extends WebTestCase
         );
     }
 
-     public function testGetHouses(): void
+    public function testGetHouses(): void
     {
         $house1 = new House();
         $house1->setName('Дом 1');
