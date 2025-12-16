@@ -15,6 +15,14 @@ class LoginController extends AbstractController
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function login(#[CurrentUser] ?User $user): Response
     {
+        $data = json_decode($request->getContent(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Некорректный JSON'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         if (!$user) {
             return $this->json([
                 'success' => false,

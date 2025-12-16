@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\House;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -40,6 +41,13 @@ class HouseController extends AbstractController
     public function createHouse(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Некорректный JSON'
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $house = new House();
         $house->setName($data['name']);

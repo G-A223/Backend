@@ -37,9 +37,11 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/create_user', name: 'create_user', methods: ['POST'])]
-    public function createUser(EntityManagerInterface $entityManager,
-        Request $request, UserPasswordHasherInterface $passwordHasher): Response
-    {
+    public function createUser(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
         $data = json_decode($request->getContent(), true);
 
         $name = $data['name'];

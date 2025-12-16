@@ -43,6 +43,13 @@ class ReserveController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Некорректный JSON'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $phone = $data['phone_number'];
         $id = $data['id'];
         $comment = $data['comment'];
