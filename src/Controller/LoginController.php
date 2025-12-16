@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class LoginController extends AbstractController
 {
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
-    public function login(#[CurrentUser] ?User $user): Response
+    public function login(#[CurrentUser] ?User $user, Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
         if (json_last_error() !== JSON_ERROR_NONE) {
