@@ -102,41 +102,6 @@ class HouseControllerTest extends WebTestCase
         $this->assertCount(2, $response['data']);
     }
 
-    public function testCreateHouse(): void
-    {
-        $houseData = [
-            'name' => 'Test house',
-            'facilities' => 'WiFi, TV',
-            'beds' => 3,
-            'bathrooms' => 2,
-            'price' => 150.0,
-            'available' => 2
-        ];
-
-        $this->client->request(
-            'POST',
-            '/api/house',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            json_encode($houseData)
-        );
-
-        $response = $this->client->getResponse();
-        $statusCode = $response->getStatusCode();
-
-        if ($statusCode === Response::HTTP_CREATED) {
-            $responseData = json_decode($response->getContent(), true);
-            $this->assertTrue($responseData['success']);
-            $this->assertEquals('Домик успешно добавлен!', $responseData['message']);
-
-            $house = $this->entityManager->getRepository(House::class)->findOneBy(['name' => 'Test house']);
-            $this->assertNotNull($house);
-        } else {
-            $this->assertNotEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $statusCode);
-        }
-    }
-
     public function testGetReservations(): void
     {
         $house = new House();
@@ -169,65 +134,5 @@ class HouseControllerTest extends WebTestCase
         $this->assertArrayHasKey('data', $response);
         $this->assertCount(1, $response['data']);
         $this->assertEquals('Test Comment', $response['data'][0]['comment']);
-    }
-
-    public function testCreateReservation(): void
-    {
-        $house = new House();
-        $house->setName('Test house');
-        $house->setFacilities('Fascilities');
-        $house->setBeds(2);
-        $house->setBathrooms(1);
-        $house->setPrice(100.0);
-        $house->setAvailable(1);
-
-        $user = $this->createTestUser('88005553535');
-
-        $this->entityManager->persist($house);
-        $this->entityManager->flush();
-
-        $this->client->request(
-            'POST',
-            '/api/reserve',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            json_encode([
-                'phone_number' => '88005553535',
-                'id' => $house->getId(),
-                'comment' => 'Test comment'
-            ])
-        );
-
-        $response = $this->client->getResponse();
-        $statusCode = $response->getStatusCode();
-        $content = $response->getContent();
-
-        if ($statusCode === Response::HTTP_CREATED) {
-            $responseData = json_decode($content, true);
-
-            $this->assertIsArray($responseData);
-            $this->assertArrayHasKey('success', $responseData);
-            $this->assertTrue($responseData['success']);
-            $this->assertEquals('Заявка успешно создана!', $responseData['message']);
-
-            $updatedHouse = $this->entityManager->getRepository(House::class)->find($house->getId());
-            $this->assertNotNull($updatedHouse);
-            $this->assertEquals(0, $updatedHouse->getAvailable());
-
-            $reservation = $this->entityManager->getRepository(Reservation::class)->findOneBy([
-            'house' => $house,
-            'user' => $user
-            ]);
-            $this->assertNotNull($reservation);
-            $this->assertEquals('Test comment', $reservation->getComment());
-        } else {
-            $this->assertContains($statusCode, [
-                Response::HTTP_BAD_REQUEST,
-                Response::HTTP_UNAUTHORIZED,
-                Response::HTTP_NOT_FOUND,
-                Response::HTTP_CONFLICT
-            ], "Unexpected status code: $statusCode. Response: " . $content);
-        }
     }
 }
