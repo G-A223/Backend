@@ -51,8 +51,8 @@ class ReserveController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $phone = $data['phone_number'];
-        $id = $data['id'];
+        $phone = $data['user'];
+        $id = $data['house'];
         $comment = $data['comment'];
 
         $house = $entityManager->getRepository(House::class)->find($id);

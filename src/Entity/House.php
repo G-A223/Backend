@@ -59,6 +59,11 @@ class House
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'house')]
     private Collection $reservations;
 
+    public function __toString(): string
+    {
+        return sprintf('%s (ID: %d)', $this->getName() ?? 'Без названия', $this->getId());
+    }
+
 
     public function getId(): ?int
     {

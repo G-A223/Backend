@@ -48,6 +48,15 @@ class Reservation
     #[ORM\Column(type: 'text')]
     private $comment;
 
+    public function __toString(): string
+    {
+        return sprintf(
+            'Бронирование #%s (Дом: %s, Пользователь: %s)',
+            $this->getId(),
+            $this->getHouse() ? $this->getHouse()->getId() : 'N/A',
+            $this->getUser() ? $this->getUser()->getId() : 'N/A'
+        );
+    }
 
     public function getId(): ?int
     {
