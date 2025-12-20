@@ -1,23 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\House;
-use App\Entity\User;
 use App\Entity\Reservation;
-use App\Services\ServicesCSV;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ReserveController extends AbstractController
 {
-    #[Route('/reserve', name: "reserve", methods: ['POST'])]
-    public function reserve(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $message = '';
+    #[Route('/reserve', name: 'reserve', methods: ['POST'])]
+    public function reserve(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): \Symfony\Component\HttpFoundation\RedirectResponse {
         $phone = $request->request->get('phone_number');
         $id = $request->request->get('id');
         $comment = $request->request->get('comment');
@@ -56,14 +59,14 @@ class ReserveController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Заявка успешно создана!');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
         }
 
         return $this->redirectToRoute('home');
     }
 
-    #[Route('/reserve/{id}/edit', name: "edit", methods: ['GET', 'POST', 'PUT'])]
+    #[Route('/reserve/{id}/edit', name: 'edit', methods: ['GET', 'POST', 'PUT'])]
     public function edit(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
         $reservation = $entityManager->getRepository(Reservation::class)->find($id);
@@ -75,10 +78,8 @@ class ReserveController extends AbstractController
             try {
                 $entityManager->flush();
                 $this->addFlash('success', 'Комментарий изменен');
-            }
-            catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
-
             }
 
             return $this->redirectToRoute('home');

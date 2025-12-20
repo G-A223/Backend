@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Controller;
+declare(strict_types=1);
 
+namespace App\Controller;
 
 use App\Entity\House;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CreateHouseController extends AbstractController
 {
@@ -29,10 +31,8 @@ class CreateHouseController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('Success', 'Домик успешно добавлен!');
-            }
-            catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
-
             }
 
 
