@@ -59,6 +59,10 @@ class House
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'house')]
     private Collection $reservations;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function setName(string $name): static
     {
@@ -72,6 +76,11 @@ class House
         $this->beds = $beds;
 
         return $this;
+    }
+
+    public function getBeds(): ?int
+    {
+        return $this->beds;
     }
 
     public function setBathrooms(int $bathrooms): static

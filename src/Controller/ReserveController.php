@@ -17,8 +17,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class ReserveController extends AbstractController
 {
     #[Route('/reserve', name: 'reserve', methods: ['POST'])]
-    public function reserve(Request $request, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\RedirectResponse
-    {
+    public function reserve(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): \Symfony\Component\HttpFoundation\RedirectResponse {
         $phone = $request->request->get('phone_number');
         $id = $request->request->get('id');
         $comment = $request->request->get('comment');

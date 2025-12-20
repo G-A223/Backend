@@ -45,6 +45,11 @@ class User
         return $this;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
