@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service;
 
 use App\Services\ServicesCSV;
@@ -40,7 +42,7 @@ class ServicesCSVTest extends TestCase
 
     public function testReadCSVWithEmptyFile(): void
     {
-        $csvContent = "";
+        $csvContent = '';
         file_put_contents($this->tempDir . '/data/test.csv', $csvContent);
 
         $result = $this->servicesCSV->readCSV('test.csv');
@@ -97,9 +99,9 @@ class ServicesCSVTest extends TestCase
 
     public function testMakeReservationWithEmptyFile(): void
     {
-        file_put_contents($this->tempDir . '/data/reservations.csv', "");
+        file_put_contents($this->tempDir . '/data/reservations.csv', '');
 
-        $housesContent = "1;Дом1;Удобства;2;1;100;2";
+        $housesContent = '1;Дом1;Удобства;2;1;100;2';
         file_put_contents($this->tempDir . '/data/houses.csv', $housesContent);
 
         $reservationData = [0, 1, '88005553535', 'Тестовый комментарий'];

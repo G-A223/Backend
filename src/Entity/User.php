@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespacefinal  App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,11 +18,17 @@ class User
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+     * @var null|string
+     */
     #[ORM\Column(type: 'string', length: 225)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 255)]
     private $name;
 
+    /**
+     * @var null|string
+     */
     #[ORM\Column(type: 'string', length: 11)]
     #[Assert\NotBlank]
     private $phone;
@@ -32,38 +38,18 @@ class User
     private Collection $reservations;
 
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(string $phone): self
+    public function setPhone(string $phone): static
     {
         $this->phone = $phone;
 
         return $this;
-    }
-
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
     }
 
     public function __construct()

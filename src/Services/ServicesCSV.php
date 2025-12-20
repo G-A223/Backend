@@ -1,4 +1,4 @@
-<?php
+final <?php
 
 declare(strict_types=1);
 
@@ -13,6 +13,11 @@ class ServicesCSV
         $this->projectDir = $projectDir;
     }
 
+    /**
+     * @return ((null|string)[]|null)[]
+     *
+     * @psalm-return list{0?: non-empty-list<null|string>|null,...}
+     */
     public function readCSV(string $filename): array
     {
         $filePath = $this->projectDir. '/data/' .$filename;
@@ -26,7 +31,7 @@ class ServicesCSV
         return $data;
     }
 
-    public function reservHouse(int $id)
+    public function reservHouse(int $id): void
     {
         $filename = 'houses.csv';
         $data = $this->readCSV($filename);
@@ -46,7 +51,7 @@ class ServicesCSV
         fclose($file);
     }
 
-    public function makeReservation(string $filename, array $data)
+    public function makeReservation(string $filename, array $data): void
     {
         $filePath = $this->projectDir. '/data/' .$filename;
         $file = fopen($filePath, 'a+');
@@ -69,7 +74,7 @@ class ServicesCSV
         fclose($file);
     }
 
-    public function updateComment(string $filename, string $comment, int $id)
+    public function updateComment(string $filename, string $comment, int $id): void
     {
         $data = $this->readCSV($filename);
 
