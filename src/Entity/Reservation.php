@@ -46,7 +46,7 @@ class Reservation
     private User $user;
 
     #[ORM\Column(type: 'text')]
-    private $comment;
+    private string $comment;
 
     public function __toString(): string
     {

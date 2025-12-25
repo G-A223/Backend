@@ -33,16 +33,25 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    /**
+     * @var null|integer
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+     * @var null|string
+     */
     #[ORM\Column(type: 'string', length: 225)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 255)]
     private $name;
 
+    /**
+     * @var null|string
+     */
     #[ORM\Column(type: 'string', length: 11)]
     #[Assert\NotBlank]
     private $phone;

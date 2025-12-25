@@ -36,23 +36,41 @@ class House
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    /**
+     * @var null|string
+     */
     #[ORM\Column(type: 'string', length: 225)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 255)]
     private $name;
 
+    /**
+     * @var null|string
+     */
     #[ORM\Column(type: 'text')]
     private $facilities;
 
+    /**
+     * @var int|null
+     */
     #[ORM\Column(type: 'integer')]
     private $beds;
 
+    /**
+     * @var int|null
+     */
     #[ORM\Column(type: 'integer')]
     private $bathrooms;
 
+    /**
+     * @var float|null
+     */
     #[ORM\Column(type: 'float')]
     private $price;
 
+    /**
+     * @var int|null
+     */
     #[ORM\Column(type: 'integer')]
     private $available;
 
@@ -63,7 +81,6 @@ class House
     {
         return sprintf('%s (ID: %d)', $this->getName() ?? 'Без названия', $this->getId());
     }
-
 
     public function getId(): ?int
     {
