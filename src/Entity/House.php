@@ -64,16 +64,14 @@ class House
         return $this->id;
     }
 
-    public function setName(string $name): static
+    public function getName(): ?string
     {
-        $this->name = $name;
-
-        return $this;
+        return $this->name;
     }
 
-    public function setBeds(int $beds): static
+    public function setName(string $name): self
     {
-        $this->beds = $beds;
+        $this->name = $name;
 
         return $this;
     }
@@ -83,14 +81,31 @@ class House
         return $this->beds;
     }
 
-    public function setBathrooms(int $bathrooms): static
+    public function setBeds(int $beds): self
+    {
+        $this->beds = $beds;
+
+        return $this;
+    }
+
+    public function getBathrooms(): ?int
+    {
+        return $this->bathrooms;
+    }
+
+    public function setBathrooms(int $bathrooms): self
     {
         $this->bathrooms = $bathrooms;
 
         return $this;
     }
 
-    public function setPrice(float $price): static
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 
@@ -102,18 +117,28 @@ class House
         return $this->available;
     }
 
-    public function setAvailable(int $available): static
+    public function setAvailable(int $available): self
     {
         $this->available = $available;
 
         return $this;
     }
 
-    public function setFacilities(string $facilities): static
+    public function getFacilities(): ?string
+    {
+        return $this->facilities;
+    }
+
+    public function setFacilities(string $facilities)
     {
         $this->facilities = $facilities;
 
         return $this;
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
     }
 
     public function __construct()

@@ -44,13 +44,6 @@
             </errorLevel>
         </PossiblyNullArgument>
 
-        <ArgumentTypeCoercion>
-            <errorLevel type="suppress">
-                <directory name="src" />
-                <directory name="tests" />
-            </errorLevel>
-        </ArgumentTypeCoercion>
-
         <MissingOverrideAttribute>
             <errorLevel type="suppress">
                 <directory name="src" />

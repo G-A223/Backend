@@ -25,21 +25,41 @@ class Reservation
     private string $comment;
 
 
-    public function setHouse(?House $house): static
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getHouse(): ?House
+    {
+        return $this->house;
+    }
+
+    public function setHouse(?House $house): self
     {
         $this->house = $house;
 
         return $this;
     }
 
-    public function setUser(?User $user): static
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function setComment(string $comment): static
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment)
     {
         $this->comment = $comment;
 
