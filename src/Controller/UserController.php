@@ -45,8 +45,9 @@ class UserController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $name = $data['name'];
-        $phone = $data['phone_number'];
+        $phone = $data['phone'];
         $password = $data['password'];
+        $roles = $data['roles'];
 
         if (strlen($password) < 8) {
             return $this->json([
@@ -68,7 +69,7 @@ class UserController extends AbstractController
             $user->setPhone($phone);
             $user->setName($name);
             $user->setPassword($hashedPassword);
-            $user->setRoles(['ROLE_USER']);
+            $user->setRoles($roles);
 
             try {
                 $entityManager->persist($user);

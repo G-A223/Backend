@@ -67,6 +67,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
     private Collection $reservations;
 
+    public function __toString(): string
+    {
+        if ($this->getPhone()) {
+            return sprintf('%s (Номер телефона: %d)', $this->getPhone(), $this->getId() ?? 0);
+        }
+
+        if ($this->getId()) {
+            return sprintf('Пользователь #%d', $this->getId());
+        }
+
+        return 'Новый пользователь';
+    }
 
     public function getId(): ?int
     {

@@ -48,7 +48,7 @@ class HouseController extends AbstractController
             return $this->json([
                 'success' => false,
                 'message' => 'Íåêîððåêòíûé JSON'
-            ], Response::HTTP_BAD_REQUEST);
+            ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $house = new House();
@@ -75,12 +75,12 @@ class HouseController extends AbstractController
                     'available' => $house->getAvailable(),
                     'facilities' => $house->getFacilities(),
                 ]
-            ], Response::HTTP_CREATED);
+            ], JsonResponse::HTTP_CREATED);
         } catch (Exception $e) {
             return $this->json([
                 'success' => false,
                 'message' => 'Îøèáêà: ' . $e->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
