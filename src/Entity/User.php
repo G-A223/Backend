@@ -60,8 +60,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        if ($this->getEmail()) {
-            return sprintf('%s (ID: %d)', $this->getEmail(), $this->getId() ?? 0);
+        if ($this->getPhone()) {
+            return sprintf('%s (Номер телефона: %d)', $this->getPhone(), $this->getId() ?? 0);
         }
 
         if ($this->getId()) {

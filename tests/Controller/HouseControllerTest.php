@@ -111,7 +111,7 @@ class HouseControllerTest extends WebTestCase
         $house->setPrice(100.0);
         $house->setAvailable(2);
 
-        $user = $this->createTestUser('88005553535');
+        $user = $this->createTestUser();
 
         $reservation = new Reservation();
         $reservation->setHouse($house);

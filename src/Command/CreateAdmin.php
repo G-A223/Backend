@@ -6,6 +6,7 @@ namespace App\Command;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,9 +31,9 @@ class CreateAdmin extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('password', InputArgument::OPTIONAL, 'Пароль администратора')
+            ->addArgument('password', InputArgument::REQUIRED, 'Пароль администратора')
             ->addOption('name', null, InputOption::VALUE_OPTIONAL, 'Имя пользователя', 'Admin')
-            ->addOption('phone', null, InputOption::VALUE_OPTIONAL, 'Телефон пользователя', '+79999999999')
+            ->addArgument('phone', InputArgument::REQUIRED, 'Телефон пользователя')
         ;
     }
 
@@ -44,7 +45,7 @@ class CreateAdmin extends Command
         $phone = $input->getArgument('phone');
         $password = $input->getArgument('password');
 
-        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['phone_number' => $phone]);
+        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['phone' => $phone]);
 
         try {
             $user = new User();
