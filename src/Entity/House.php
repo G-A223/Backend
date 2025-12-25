@@ -59,7 +59,7 @@ class House
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'house')]
     private Collection $reservations;
 
-   public function getId(): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }

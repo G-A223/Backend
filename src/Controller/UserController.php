@@ -68,7 +68,7 @@ class UserController extends AbstractController
             $user->setPhone($phone);
             $user->setName($name);
             $user->setPassword($hashedPassword);
-            $user->setRoles('ROLE_USER');
+            $user->setRoles(['ROLE_USER']);
 
             try {
                 $entityManager->persist($user);
