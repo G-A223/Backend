@@ -50,11 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $reservations;
 
 
-    public function setName(string $name): static
+    public function getId(): ?int
     {
-        $this->name = $name;
-
-        return $this;
+        return $this->id;
     }
 
     public function getName(): ?string
@@ -62,7 +60,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->name;
     }
 
-    public function setPhone(string $phone): static
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
