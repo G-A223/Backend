@@ -4,10 +4,34 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\ReserveController;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'reservations')]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            name: 'reservations',
+            uriTemplate: '/api/reservations',
+            controller: ReserveController::class . '::getReservations',
+        ),
+        new Post(
+            name: 'reserve',
+            uriTemplate: '/api/reserve',
+            controller: ReserveController::class . '::reserve',
+        ),
+        new Put(
+            name: 'edit',
+            uriTemplate: '/api/reserve/{id}',
+            controller: ReserveController::class . '::edit',
+        ),
+    ]
+)]
 class Reservation
 {
     #[ORM\Id]
