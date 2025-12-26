@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Редактировать заявку №{{ reservation[0] }}</h1>
+    <form method="POST">
+        <input type='hidden' name='_method' value='PUT'>
+
+        <div>
+            <label>ID домика: {{ reservation[1] }}</label>
+        </div>
+
+        <div>
+            <label>Телефон: {{ reservation[2] }}</label>
+        </div>
+
+        <div>
+            <label for="comment">Комментарий:</label><br>
+            <textarea name="comment" rows="4" cols="50" required>{{ reservation[3] }}</textarea>
+        </div>
+
+        <button type=submit>Сохранить</button>
+        <a href="{{ path('home') }}"><button>Отмена</button></a>
+    </form>
+{% endblock %}
+
+{% block style %}
+    div {
+        margin-bottom: 15px;
+    }
+    input[type="submit"] {
+        font-family: Verdana, sans-serif;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        transition-duration: 0.4s;
+    }
+    input[type="submit"]:hover {
+        background-color: #cfd0cfff;
+    }
+    textarea {
+        font-family: Verdana, sans-serif;
+        background-color: #f9f9f9ff;
+        border-color: #dededeff;
+        border-radius: 6px;
+        padding: 4px;
+    }
+{% endblock %}
