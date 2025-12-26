@@ -27,13 +27,26 @@ class ReserveController extends AbstractController
 
         $data = array(0, $id, $phone, $comment);
 
-        try {
+        $houses = $this->servicesCsv->readCSV('houses.csv');
+        $is_available = true;
+        foreach($houses as $house_param) {
+            if ($house_param[0] == $id) {
+                if ($house_param[6] == 0) {
+                    $is_available = false;
+                }
+                break;
+            }
+        }
+
+        if ($is_available) {
+            try {
             $this->servicesCsv->makeReservation('reservations.csv', $data);
             $this->addFlash('Success', 'Заявка успешно создана!');
-        }
-        catch (\Exception $e) {
-            $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
+            }
+            catch (\Exception $e) {
+                $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
 
+            }
         }
 
         return $this->redirectToRoute('home');

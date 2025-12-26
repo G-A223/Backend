@@ -27,18 +27,18 @@ class ServicesCSV
     public function reservHouse(int $id)
     {
         $filename = 'houses.csv';
-        $data = $this->readCSV($filename);
+        $house_data = $this->readCSV($filename);
 
-        foreach($data as &$elem) {
-            if ($elem[0] == $id) {
-                $elem[6] = (int)$elem[6] - 1;
+        foreach($house_data as $house_param) {
+            if ($house_param[0] == $id) {
+                $house_param[6] = (int)$house_param[6] - 1;
                 break;
             }
         }
 
         $filePath = $this->projectDir. '/data/' .$filename;
         $file = fopen($filePath, 'w');
-        foreach($data as $row) {
+        foreach($house_data as $row) {
             fputcsv($file, $row, ';');
         }
         fclose($file);
